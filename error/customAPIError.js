@@ -1,12 +1,13 @@
 class customAPIError extends Error {
-  customAPIError(message, status) {
+  customAPIError(message, statusCode) {
     supper(message);
-    this.status = status;
+
+    this.statusCode = statusCode;
+    this.status = `${statusCode}`.startsWith('4') ? 'fail' : 'error';
+    this.isOperational = true;
+
+    Error.captureStackTrace(this, this.constructor);
   }
 }
 
-const createCustomError = (message, status) => {
-  return new customErrorAPI(message, status);
-};
-
-module.exports = { customAPIError, createCustomError };
+module.exports = customAPIError;
