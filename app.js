@@ -1,25 +1,24 @@
-const express = require("express");
-const mainRoute = require('./routs/mainRouts');
-const notFound = require('./middleware/not-found');
-const errHandlerMiddleware = require('./middleware/err-handler');
+require('dotenv').config();
 require('express-async-errors');
 
-require('dotenv').config();
+const express = require("express");
 const app = express();
+
+const mainRouter = require('./routs/mainRouts');
+const notFound = require('./middleware/not-found');
+const errHandlerMiddleware = require('./middleware/err-handler');
+
 
 // Middleware
 app.use(express.static('./public'));
 app.use(express.json());
 
+app.use('/api/v1', mainRouter);
 
-app.use('/api/v1/main', mainRoute);
-
-/// Not Found
 app.use(notFound);
-// Error Handler
 app.use(errHandlerMiddleware);
 
-const port = 3000;
+const port = process.env.PORT | 3000;
 const start = () => {
   try {
     
