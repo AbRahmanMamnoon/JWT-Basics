@@ -5,14 +5,8 @@
 // setup authentication, so only the request with JWT can access the dashboard
 
 const CustomApiError = require('../error/customAPIError');
-const jwt = require('jsonwebtoken');
 require('dotenv').config();
-exports.dashboard = (req, res) => {
-  res.send({
-    msg: 'Hello, John Deo',
-    secret: `Here is your authorized data, your lucky number is ${Math.floor(Math.random() * 100)}`
-  })
-}
+
 
 exports.login = (req, res) => {
 
@@ -33,7 +27,18 @@ exports.login = (req, res) => {
   const token = jwt.sign({id, username}, process.env.JWT_SECRET, { expiresIn: '30d' });
 
   res.send({
-    msg: 'Fake login/register',
+    msg: 'user created',
     token,
   });
+}
+
+
+exports.dashboard = (req, res) => {
+
+  console.log(req.user);
+
+  res.send({
+    msg: `Hello, ${req.user.username}`,
+    secret: `Here is your authorized data, your lucky number is ${Math.floor(Math.random() * 100)}`
+  })
 }
